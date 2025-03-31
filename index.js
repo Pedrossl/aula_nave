@@ -40,9 +40,37 @@ app.get("/tipo/:id", async (req, res) => {
 });
 
 app.get("/naves", async (req, res) => {
-  const { nave } = req.params;
   const naves = await bancoDeDados.select("*").from("naves");
   res.json(naves);
+});
+
+app.get("/naves/:id", async (req, res) => {
+  const { id } = req.params;
+  const nave = await bancoDeDados("naves").select("*").where({ id });
+  res.json(nave);
+});
+
+app.delete("/tipo/:id", async (req, res) => {
+  const { id } = req.params;
+  // DELETE FROM tipos WHERE id = :id
+  const tipo = await bancoDeDados("tipos").where({ id }).del();
+  res.json(tipo);
+});
+
+app.post("/nave", async (req, res) => {
+  const { nome, cor, tipo_id } = req.body;
+  // INSERT INTO naves(nome,cor,tipo_id) VALUES ("nome","cor", 1);
+  const nave = await bancoDeDados("naves").insert({ nome, cor, tipo_id });
+  res.json(nave);
+});
+app.get("/naveTunada", async (req, res) => {
+  // SELECT naves.nome, tipos.nome FROM naves
+  // JOIN tipos ON tipos.id = naves.tipo_id;
+  const nave = await bancoDeDados("naves")
+    .select("naves.*", "tipos.nome as tipoNome")
+    .join("tipos", "tipos.id", "=", "naves.tipo_id");
+
+  res.json(nave);
 });
 
 app.listen(port, () => {
