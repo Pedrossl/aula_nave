@@ -1,3 +1,4 @@
+DROP DATABASE nave;
 CREATE DATABASE nave;
 USE nave;
 
@@ -15,3 +16,4 @@ CREATE table naves(
 );
 
 INSERT INTO tipos(nome) VALUES ('Nave Mineradora');
+INSERT INTO naves(nome,cor,tipo_id) VALUES ('Nave do Grimas', 'Roxa',1);
